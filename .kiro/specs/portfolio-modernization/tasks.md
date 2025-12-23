@@ -111,3 +111,11 @@
     - Verify CSS fallbacks work properly for older browsers
     - Ensure all hover effects and transitions work consistently
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
+
+- [ ] 8. Fix mobile carousel indicators horizontal scrolling
+
+  - [ ] 8.1 Implement horizontal scrolling for carousel indicators on mobile
+    - Make the carousel indicators container horizontally scrollable when content overflows
+    - Add smooth scrolling behavior and proper touch support for mobile devices
+    - Ensure indicators remain accessible and properly styled during scroll
+    - _Requirements: 3.5, 3.6, 1.3_

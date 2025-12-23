@@ -14,24 +14,25 @@
           sm="6"
         >
           <div
-            class="hero-title-container slide-in-left visible"
-            :class="{ visible: isVisible }"
+            ref="titleRef"
+            class="hero-title-container slide-in-left"
+            :class="{ visible: titleVisible }"
           >
             <h1 class="headland-one hero-title">Hi, I'm Pratik</h1>
           </div>
 
           <h2
-            class="overpass hero-subtitle slide-in-left visible"
-            :class="{ visible: isVisible }"
-            style="transition-delay: 0.2s"
+            ref="subtitleRef"
+            class="overpass hero-subtitle slide-in-left"
+            :class="{ visible: subtitleVisible }"
           >
             a Web Developer
           </h2>
 
           <div
-            class="hero-buttons slide-in-left visible"
-            :class="{ visible: isVisible }"
-            style="transition-delay: 0.4s"
+            ref="buttonsRef"
+            class="hero-buttons slide-in-left"
+            :class="{ visible: buttonsVisible }"
           >
             <v-row>
               <v-col>
@@ -79,9 +80,9 @@
           </div>
         </v-col>
         <v-col
-          class="hero-animation slide-in-right visible"
-          :class="{ visible: isVisible }"
-          style="transition-delay: 0.3s"
+          ref="animationRef"
+          class="hero-animation slide-in-right"
+          :class="{ visible: animationVisible }"
           cols="12"
           md="6"
           sm="6"
@@ -115,9 +116,18 @@ import { Vue3Lottie } from "vue3-lottie";
 import "vue3-lottie/dist/style.css";
 import { ref, onMounted } from "vue";
 
-const containerRef = ref(null);
-const isVisible = ref(true);
 const boyAvatarJSON = ref(null);
+
+// For hero section, start visible and animate in immediately
+const titleVisible = ref(false);
+const subtitleVisible = ref(false);
+const buttonsVisible = ref(false);
+const animationVisible = ref(false);
+
+const titleRef = ref(null);
+const subtitleRef = ref(null);
+const buttonsRef = ref(null);
+const animationRef = ref(null);
 
 // Initialize animations after component mounts
 onMounted(async () => {
@@ -130,15 +140,22 @@ onMounted(async () => {
     boyAvatarJSON.value = null;
   }
 
-  // Initialize animations
+  // Trigger hero animations immediately
   setTimeout(() => {
-    if (containerRef.value) {
-      const elements = containerRef.value.querySelectorAll(
-        ".slide-in-left, .slide-in-right"
-      );
-      elements.forEach((el) => el.classList.add("visible"));
-    }
-  }, 100);
+    titleVisible.value = true;
+  }, 200);
+
+  setTimeout(() => {
+    subtitleVisible.value = true;
+  }, 400);
+
+  setTimeout(() => {
+    buttonsVisible.value = true;
+  }, 600);
+
+  setTimeout(() => {
+    animationVisible.value = true;
+  }, 300);
 });
 
 const handleAnimationError = () => {
@@ -159,7 +176,7 @@ const scrollToFooter = () => {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background-color: var(--color-background);
+  background-color: var(--color-surface);
   position: relative;
 }
 

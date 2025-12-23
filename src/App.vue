@@ -461,8 +461,8 @@ a:focus-visible,
 .fade-in-up {
   opacity: 0;
   transform: translate3d(0, 30px, 0);
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-in-up.visible {
@@ -482,9 +482,9 @@ a:focus-visible,
 
 .slide-in-left {
   opacity: 0;
-  transform: translate3d(-30px, 0, 0);
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate3d(-40px, 0, 0);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-in-left.visible {
@@ -494,9 +494,9 @@ a:focus-visible,
 
 .slide-in-right {
   opacity: 0;
-  transform: translate3d(30px, 0, 0);
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate3d(40px, 0, 0);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-in-right.visible {
@@ -519,9 +519,9 @@ a:focus-visible,
 /* Staggered animation utilities */
 .stagger-item {
   opacity: 0;
-  transform: translate3d(0, 20px, 0);
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate3d(0, 30px, 0);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stagger-item.visible {

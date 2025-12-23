@@ -1,22 +1,26 @@
 <template>
   <section class="skills-section" aria-labelledby="skills-title">
     <v-container>
-      <div class="skills-title fade-in-up visible" ref="containerRef">
+      <div
+        ref="titleRef"
+        class="skills-title fade-in-up"
+        :class="{ visible: titleVisible }"
+      >
         <h2 class="sub-title overpass" id="skills-title">
           Skills<span class="accent-dot" aria-hidden="true">.</span>
         </h2>
       </div>
       <div
-        class="skills-grid fade-in-up visible"
-        style="transition-delay: 0.2s"
+        ref="skillsRef"
+        class="skills-grid"
         role="list"
         aria-label="Technical skills"
-        ref="skillsRef"
       >
         <div
           v-for="(skill, i) in skills"
           :key="i"
-          class="skill-item stagger-item visible touch-target"
+          class="skill-item stagger-item touch-target"
+          :class="{ visible: isItemVisible(i) }"
           data-stagger-item
           role="listitem"
           :aria-label="`${skill.text} skill`"
@@ -37,13 +41,26 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import {
+  useScrollAnimation,
+  useStaggeredAnimation,
+} from "@/composables/useScrollAnimation.js";
 
-const containerRef = ref(null);
-const skillsRef = ref(null);
+// Scroll animations
+const { isVisible: titleVisible, elementRef: titleRef } = useScrollAnimation({
+  threshold: 0.1,
+  rootMargin: "0px 0px -20px 0px",
+});
+
+const { isItemVisible, containerRef: skillsRef } = useStaggeredAnimation({
+  staggerDelay: 150,
+  threshold: 0.1,
+  rootMargin: "0px 0px -20px 0px",
+});
 
 const skills = [
   { text: "JavaScript", icon: "mdi-language-javascript" },
-  { text: "React", icon: "mdi-react" },
+  { text: "React.js", icon: "mdi-react" },
   { text: "Vue.js", icon: "mdi-vuejs" },
   { text: "Node.js", icon: "mdi-nodejs" },
   { text: "Express.js", icon: "mdi-server" },
@@ -53,14 +70,7 @@ const skills = [
 ];
 
 onMounted(() => {
-  setTimeout(() => {
-    if (containerRef.value) {
-      const elements = containerRef.value.querySelectorAll(
-        ".fade-in-up, .stagger-item"
-      );
-      elements.forEach((el) => el.classList.add("visible"));
-    }
-  }, 100);
+  // Scroll animations are handled by the composables
 });
 </script>
 

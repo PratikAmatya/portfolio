@@ -4,15 +4,19 @@
     aria-labelledby="work-experience-title"
   >
     <v-container>
-      <div class="work-experience__title fade-in-up visible" ref="containerRef">
+      <div
+        ref="titleRef"
+        class="work-experience__title fade-in-up"
+        :class="{ visible: titleVisible }"
+      >
         <h2 class="sub-title overpass" id="work-experience-title">
           Work Experience<span class="accent-dot" aria-hidden="true">.</span>
         </h2>
       </div>
 
       <div
-        class="timeline fade-in-up visible"
-        style="transition-delay: 0.2s"
+        ref="timelineRef"
+        class="timeline"
         role="list"
         aria-label="Work experience timeline"
       >
@@ -27,7 +31,8 @@
             :key="i"
             :dot-color="year.color"
             size="x-small"
-            class="stagger-item visible timeline-item"
+            class="stagger-item timeline-item"
+            :class="{ visible: isItemVisible(i) }"
             data-stagger-item
             role="listitem"
           >
@@ -70,9 +75,22 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import {
+  useScrollAnimation,
+  useStaggeredAnimation,
+} from "@/composables/useScrollAnimation.js";
 
-const containerRef = ref(null);
-const timelineRef = ref(null);
+// Scroll animations
+const { isVisible: titleVisible, elementRef: titleRef } = useScrollAnimation({
+  threshold: 0.1,
+  rootMargin: "0px 0px -20px 0px",
+});
+
+const { isItemVisible, containerRef: timelineRef } = useStaggeredAnimation({
+  staggerDelay: 200,
+  threshold: 0.1,
+  rootMargin: "0px 0px -20px 0px",
+});
 
 const years = [
   {
@@ -83,7 +101,7 @@ const years = [
     title: "Full Stack Developer",
     organization: "Beam Lab Pvt. Ltd.",
     description:
-      "My responsibilities include developing and maintaining web and mobile applications with React.js, Vue.js, and React Native. I also design and develop the back-end using Express.js for APIs and manage databases.",
+      "My responsibilities include building and deploying scalable web applications with React.js and Vue.js, while developing secure APIs with Express.js and integrating CI/CD pipelines for smooth delivery.",
   },
   {
     color: "#ffef5c",
@@ -98,15 +116,7 @@ const years = [
 ];
 
 onMounted(() => {
-  // Ensure animations trigger after mount
-  setTimeout(() => {
-    if (containerRef.value) {
-      const elements = containerRef.value.querySelectorAll(
-        ".fade-in-up, .stagger-item"
-      );
-      elements.forEach((el) => el.classList.add("visible"));
-    }
-  }, 100);
+  // Scroll animations are handled by the composables
 });
 </script>
 

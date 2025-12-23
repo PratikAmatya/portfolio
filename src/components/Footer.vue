@@ -1,5 +1,11 @@
 <template>
-  <footer class="modern-footer" role="contentinfo" aria-label="Site footer">
+  <footer
+    ref="footerRef"
+    class="modern-footer fade-in-up"
+    :class="{ visible: footerVisible }"
+    role="contentinfo"
+    aria-label="Site footer"
+  >
     <v-container>
       <div class="footer-content">
         <div class="footer-main">
@@ -60,8 +66,15 @@
 
 <script setup>
 import { computed } from "vue";
+import { useScrollAnimation } from "@/composables/useScrollAnimation.js";
 
 const currentYear = computed(() => new Date().getFullYear());
+
+// Scroll animation
+const { isVisible: footerVisible, elementRef: footerRef } = useScrollAnimation({
+  threshold: 0.2,
+  rootMargin: "0px 0px -50px 0px",
+});
 </script>
 
 <style scoped>

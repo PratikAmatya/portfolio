@@ -1,92 +1,70 @@
 import { ref, onMounted, onUnmounted } from "vue";
 
-/**
- * Composable for scroll-triggered animations using Intersection Observer
- * @param {Object} options - Configuration options
- * @param {number} options.threshold - Intersection threshold (0-1)
- * @param {string} options.rootMargin - Root margin for intersection observer
- * @param {boolean} options.once - Whether animation should trigger only once
- * @returns {Object} - Reactive refs and methods for scroll animations
- */
 export function useScrollAnimation(options = {}) {
   const {
     threshold = 0.1,
     rootMargin = "0px 0px -50px 0px",
-    once = true,
+    triggerOnce = true,
   } = options;
 
   const isVisible = ref(false);
   const elementRef = ref(null);
   let observer = null;
 
-  const createObserver = () => {
-    if (typeof window === "undefined" || !window.IntersectionObserver) {
-      // Fallback for environments without IntersectionObserver
-      isVisible.value = true;
-      return;
-    }
-
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            isVisible.value = true;
-            if (once && observer) {
-              observer.unobserve(entry.target);
-            }
-          } else if (!once) {
-            isVisible.value = false;
-          }
-        });
-      },
-      {
-        threshold,
-        rootMargin,
-      }
-    );
-
-    if (elementRef.value) {
-      observer.observe(elementRef.value);
-    }
-  };
-
-  const startObserving = () => {
-    if (elementRef.value && observer) {
-      observer.observe(elementRef.value);
-    }
-  };
-
-  const stopObserving = () => {
-    if (observer && elementRef.value) {
-      observer.unobserve(elementRef.value);
-    }
-  };
-
   onMounted(() => {
-    createObserver();
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      if (!elementRef.value) {
+        // Fallback: make visible if element ref is not available
+        isVisible.value = true;
+        return;
+      }
+
+      // Check if element is already in view
+      const rect = elementRef.value.getBoundingClientRect();
+      const windowHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
+      if (rect.top < windowHeight && rect.bottom > 0) {
+        isVisible.value = true;
+        return;
+      }
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              isVisible.value = true;
+              if (triggerOnce) {
+                observer.unobserve(entry.target);
+              }
+            } else if (!triggerOnce) {
+              isVisible.value = false;
+            }
+          });
+        },
+        {
+          threshold,
+          rootMargin,
+        }
+      );
+
+      observer.observe(elementRef.value);
+    }, 100);
   });
 
   onUnmounted(() => {
-    if (observer) {
-      observer.disconnect();
+    if (observer && elementRef.value) {
+      observer.unobserve(elementRef.value);
     }
   });
 
   return {
     isVisible,
     elementRef,
-    startObserving,
-    stopObserving,
   };
 }
 
-/**
- * Composable for staggered animations on multiple elements
- * @param {Object} options - Configuration options
- * @param {number} options.staggerDelay - Delay between each item animation (ms)
- * @param {number} options.threshold - Intersection threshold
- * @returns {Object} - Methods and refs for staggered animations
- */
 export function useStaggeredAnimation(options = {}) {
   const {
     staggerDelay = 100,
@@ -94,66 +72,71 @@ export function useStaggeredAnimation(options = {}) {
     rootMargin = "0px 0px -50px 0px",
   } = options;
 
-  const visibleItems = ref(new Set());
   const containerRef = ref(null);
+  const visibleItems = ref(new Set());
   let observer = null;
 
-  const createStaggeredObserver = () => {
-    if (typeof window === "undefined" || !window.IntersectionObserver) {
-      return;
-    }
-
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = parseInt(entry.target.dataset.index) || 0;
-
-            setTimeout(() => {
-              visibleItems.value.add(index);
-            }, index * staggerDelay);
-
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold,
-        rootMargin,
-      }
-    );
-  };
-
-  const observeChildren = () => {
-    if (!containerRef.value || !observer) return;
-
-    const children = containerRef.value.querySelectorAll("[data-stagger-item]");
-    children.forEach((child, index) => {
-      child.dataset.index = index;
-      observer.observe(child);
-    });
-  };
-
-  const isItemVisible = (index) => {
-    return visibleItems.value.has(index);
-  };
+  const isItemVisible = (index) => visibleItems.value.has(index);
 
   onMounted(() => {
-    createStaggeredObserver();
-    // Use nextTick to ensure DOM is ready
-    setTimeout(observeChildren, 100);
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      if (!containerRef.value) return;
+
+      // Check if container is already in view
+      const rect = containerRef.value.getBoundingClientRect();
+      const windowHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
+      if (rect.top < windowHeight && rect.bottom > 0) {
+        // Trigger staggered animation immediately if in view
+        const items = containerRef.value.querySelectorAll(
+          "[data-stagger-item]"
+        );
+        items.forEach((item, index) => {
+          setTimeout(() => {
+            visibleItems.value.add(index);
+            item.classList.add("visible");
+          }, index * staggerDelay);
+        });
+        return;
+      }
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const items = containerRef.value.querySelectorAll(
+                "[data-stagger-item]"
+              );
+              items.forEach((item, index) => {
+                setTimeout(() => {
+                  visibleItems.value.add(index);
+                  item.classList.add("visible");
+                }, index * staggerDelay);
+              });
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold,
+          rootMargin,
+        }
+      );
+
+      observer.observe(containerRef.value);
+    }, 100);
   });
 
   onUnmounted(() => {
-    if (observer) {
-      observer.disconnect();
+    if (observer && containerRef.value) {
+      observer.unobserve(containerRef.value);
     }
   });
 
   return {
-    visibleItems,
-    containerRef,
-    observeChildren,
     isItemVisible,
+    containerRef,
   };
 }

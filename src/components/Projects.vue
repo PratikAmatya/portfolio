@@ -1,15 +1,20 @@
 <template>
   <section class="projects-section" aria-labelledby="projects-title">
     <v-container>
-      <div class="projects__title fade-in-up visible" ref="containerRef">
+      <div
+        ref="titleRef"
+        class="projects__title fade-in-up"
+        :class="{ visible: titleVisible }"
+      >
         <h2 class="sub-title overpass" id="projects-title">
           Personal Projects<span class="accent-dot" aria-hidden="true">.</span>
         </h2>
       </div>
 
       <div
-        class="projects-subtitle fade-in-up visible"
-        style="transition-delay: 0.1s"
+        ref="subtitleRef"
+        class="projects-subtitle fade-in-up"
+        :class="{ visible: subtitleVisible }"
       >
         <p class="inter projects-description">
           A collection of projects showcasing my skills in full-stack
@@ -19,8 +24,9 @@
 
       <!-- Featured Project -->
       <div
-        class="featured-project fade-in-up visible"
-        style="transition-delay: 0.2s"
+        ref="featuredRef"
+        class="featured-project fade-in-up"
+        :class="{ visible: featuredVisible }"
       >
         <div class="featured-card">
           <div class="featured-header">
@@ -125,8 +131,9 @@
 
       <!-- Other Projects Carousel -->
       <div
-        class="other-projects fade-in-up visible"
-        style="transition-delay: 0.4s"
+        ref="otherRef"
+        class="other-projects fade-in-up"
+        :class="{ visible: otherVisible }"
       >
         <h3 class="other-projects-title overpass" id="other-projects-title">
           Other Projects
@@ -228,51 +235,111 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import { useScrollAnimation } from "@/composables/useScrollAnimation.js";
 
-const containerRef = ref(null);
-const projectsRef = ref(null);
+// Scroll animations
+const { isVisible: titleVisible, elementRef: titleRef } = useScrollAnimation({
+  threshold: 0.1,
+  rootMargin: "0px 0px -20px 0px",
+});
+
+const { isVisible: subtitleVisible, elementRef: subtitleRef } =
+  useScrollAnimation({
+    threshold: 0.1,
+    rootMargin: "0px 0px -20px 0px",
+  });
+
+const { isVisible: featuredVisible, elementRef: featuredRef } =
+  useScrollAnimation({
+    threshold: 0.1,
+    rootMargin: "0px 0px -20px 0px",
+  });
+
+const { isVisible: otherVisible, elementRef: otherRef } = useScrollAnimation({
+  threshold: 0.1,
+  rootMargin: "0px 0px -20px 0px",
+});
 
 const currentProject = ref(0);
 const isAutoPlaying = ref(true);
 let autoPlayInterval = null;
 
+// const featuredProject = {
+//   title: "Kipa E-commerce Application",
+//   subtitle: "Full-Stack E-commerce Platform",
+//   description:
+//     "A comprehensive e-commerce solution featuring customer shopping experience and admin management dashboard. Built with modern web technologies and scalable architecture.",
+//   longDescription:
+//     "The application allows customers to browse products, select desired items, add them to a shopping cart, and place orders by providing a delivery address. Additionally, on the admin side, the administrator can perform CRUD functions on product details and view comprehensive information regarding orders received.",
+//   technologies: [
+//     "Express.js",
+//     "SendGrid API",
+//     "MongoDB",
+//     "JWT",
+//     "EJS",
+//     "React",
+//   ],
+//   features: [
+//     "User Authentication & Authorization",
+//     "Product Catalog Management",
+//     "Shopping Cart & Checkout",
+//     "Order Management System",
+//     "Admin Dashboard",
+//     "Email Notifications",
+//   ],
+//   links: [
+//     {
+//       name: "API Repository",
+//       icon: "mdi-github",
+//       url: "https://github.com/PratikAmatya/Shopping-API",
+//     },
+//     {
+//       name: "React App Repository",
+//       icon: "mdi-github",
+//       url: "https://github.com/PratikAmatya/Shopping-React-App",
+//     },
+//   ],
+//   status: "Production Ready",
+//   year: "2023",
+// };
+
 const featuredProject = {
-  title: "Kipa E-commerce Application",
-  subtitle: "Full-Stack E-commerce Platform",
+  title: "SparkJoy Novel Application",
+  subtitle: "Full-Stack Storytelling Platform",
   description:
-    "A comprehensive e-commerce solution featuring customer shopping experience and admin management dashboard. Built with modern web technologies and scalable architecture.",
+    "A comprehensive platform connecting writers and readers, providing tools for story creation, community interaction, and monetization.",
   longDescription:
-    "The application allows customers to browse products, select desired items, add them to a shopping cart, and place orders by providing a delivery address. Additionally, on the admin side, the administrator can perform CRUD functions on product details and view comprehensive information regarding orders received.",
+    "SparkJoy allows writers to write, organize, and publish their stories seamlessly, introducing characters and chapters to enhance reader engagement. Readers can explore diverse genres, follow favorite authors, comment, like, and support writers through donations. The platform fosters a community-driven environment for creative storytelling and interactive experiences.",
   technologies: [
+    "Vue.js",
     "Express.js",
-    "SendGrid API",
-    "MongoDB",
-    "JWT",
-    "EJS",
-    "React",
+    "Auth0",
+    "Passport.js",
+    "Firebase",
+    "GitHub Actions",
   ],
   features: [
-    "User Authentication & Authorization",
-    "Product Catalog Management",
-    "Shopping Cart & Checkout",
-    "Order Management System",
-    "Admin Dashboard",
-    "Email Notifications",
+    "User Authentication & Social Login",
+    "Story Creation & Chapter Management",
+    "Reader Interaction (Comments & Likes)",
+    "Monetization via Donations",
+    "Admin Dashboard for Platform Management",
+    "Deployment with CI/CD Pipelines",
   ],
   links: [
     {
-      name: "API Repository",
+      name: "Frontend Repository",
       icon: "mdi-github",
-      url: "https://github.com/PratikAmatya/Shopping-API",
+      url: "https://github.com/PratikAmatya/SparkJoy-Frontend",
     },
     {
-      name: "React App Repository",
+      name: "Backend Repository",
       icon: "mdi-github",
-      url: "https://github.com/PratikAmatya/Shopping-React-App",
+      url: "https://github.com/PratikAmatya/SparkJoy-Backend",
     },
   ],
   status: "Production Ready",
-  year: "2023",
+  year: "2024 - Present",
 };
 
 const otherProjects = [
@@ -355,15 +422,6 @@ const goToProject = (index) => {
 };
 
 onMounted(() => {
-  setTimeout(() => {
-    if (containerRef.value) {
-      const elements = containerRef.value.querySelectorAll(
-        ".fade-in-up, .stagger-item"
-      );
-      elements.forEach((el) => el.classList.add("visible"));
-    }
-  }, 100);
-
   // Start auto-play for carousel
   startAutoPlay();
 });
@@ -834,6 +892,9 @@ onUnmounted(() => {
   padding: 1rem;
   background: #f8f9fa;
   gap: 0.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .indicator {
@@ -938,9 +999,21 @@ onUnmounted(() => {
     gap: 0.5rem;
   }
 
+  .carousel-indicators {
+    justify-content: flex-start;
+    padding: 1rem 0.5rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .carousel-indicators::-webkit-scrollbar {
+    display: none;
+  }
+
   .indicator {
     padding: 0.375rem 0.75rem;
     font-size: 0.7rem;
+    flex-shrink: 0;
   }
 
   .indicator-label {
@@ -967,6 +1040,30 @@ onUnmounted(() => {
 
   .carousel-slide {
     padding: 1.75rem;
+  }
+
+  .carousel-indicators {
+    overflow-x: auto;
+    justify-content: flex-start;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 239, 92, 0.3) transparent;
+  }
+
+  .carousel-indicators::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .carousel-indicators::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .carousel-indicators::-webkit-scrollbar-thumb {
+    background: rgba(255, 239, 92, 0.3);
+    border-radius: 2px;
+  }
+
+  .indicator {
+    flex-shrink: 0;
   }
 }
 

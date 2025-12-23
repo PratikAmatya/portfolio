@@ -38,6 +38,8 @@ This project aims to modernize and enhance the existing Vue.js portfolio website
 2. WHEN I hover over project cards THEN they SHALL provide interactive feedback with animations
 3. WHEN project information is displayed THEN it SHALL be well-organized and easy to read
 4. WHEN viewing projects on different screen sizes THEN the layout SHALL adapt appropriately
+5. WHEN viewing the "Other Projects" carousel indicators on mobile devices THEN they SHALL be horizontally scrollable to access all project buttons
+6. WHEN the carousel indicators overflow the screen width THEN users SHALL be able to scroll horizontally to view all available projects
 
 ### Requirement 4
 

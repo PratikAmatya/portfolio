@@ -1,30 +1,26 @@
 <template>
   <v-container>
     <div
+      ref="titleRef"
       class="projects__title fade-in-up"
-      :class="{ visible: isVisible }"
+      :class="{ visible: titleVisible }"
       id="contactMe"
-      ref="containerRef"
     >
       <h2 class="sub-title overpass" id="contact-title">Contact me</h2>
       <span style="font-size: 6rem; color: #ffef5c" aria-hidden="true">.</span>
     </div>
 
     <div
+      ref="subtitleRef"
       class="project-subtitle mb-4 mt-n4 fade-in-up"
-      :class="{ visible: isVisible }"
-      style="transition-delay: 0.2s"
+      :class="{ visible: subtitleVisible }"
     >
       <span class="space-grotesk description"
         >Got a project in mind or just want to connect? Hit me up and let's
         chat!</span
       >
     </div>
-    <div
-      class="contact-me__form fade-in-up"
-      :class="{ visible: isVisible }"
-      style="transition-delay: 0.4s"
-    >
+    <div ref="buttonsRef" class="contact-me__form">
       <v-row
         align="center"
         justify="center"
@@ -191,10 +187,16 @@ import {
   useStaggeredAnimation,
 } from "@/composables/useScrollAnimation.js";
 
-const { isVisible, elementRef: containerRef } = useScrollAnimation({
-  threshold: 0.2,
+const { isVisible: titleVisible, elementRef: titleRef } = useScrollAnimation({
+  threshold: 0.3,
   rootMargin: "0px 0px -50px 0px",
 });
+
+const { isVisible: subtitleVisible, elementRef: subtitleRef } =
+  useScrollAnimation({
+    threshold: 0.3,
+    rootMargin: "0px 0px -50px 0px",
+  });
 
 const { isItemVisible, containerRef: buttonsRef } = useStaggeredAnimation({
   staggerDelay: 150,
