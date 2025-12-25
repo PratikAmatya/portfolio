@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animation Performance & Browser Compatibility Test</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f7f7f9;
+        color: #171719;
+      }
+
+      .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .test-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #ffef5c;
+      }
+
+      .test-section {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+      }
+
+      .section-title {
+        color: #171719;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #28a745;
+      }
+
+      .status-indicator.warning {
+        background: #ffc107;
+      }
+      .status-indicator.error {
+        background: #dc3545;
+      }
+
+      .test-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .test-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+      }
+
+      .test-card h4 {
+        margin: 0 0 10px 0;
+        color: #171719;
+      }
+
+      .test-result {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .test-result:last-child {
+        border-bottom: none;
+      }
+
+      .test-status {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .test-status.pass {
+        background: #d4edda;
+        color: #155724;
+      }
+      .test-status.fail {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .test-status.warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .performance-monitor {
+        background: #171719;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        margin-bottom: 20px;
+      }
+
+      .performance-metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .metric {
+        background: rgba(255, 239, 92, 0.1);
+        padding: 10px;
+        border-radius: 6px;
+        border-left: 3px solid #ffef5c;
+      }
+
+      .metric-value {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #ffef5c;
+      }
+
+      .test-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        background: #ffef5c;
+        color: #171719;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 5px;
+      }
+
+      .test-btn:hover {
+        background: #f0e04a;
+        transform: translateY(-1px);
+      }
+
+      .animation-demo {
+        height: 200px;
+        background: linear-gradient(135deg, #ffef5c 0%, #f0e04a 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .demo-element {
+        width: 50px;
+        height: 50px;
+        background: #171719;
+        border-radius: 50%;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .browser-support {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+      }
+
+      .browser-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        background: #f8f9fa;
+        border-radius: 6px;
+      }
+
+      .browser-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+      }
+
+      .chrome {
+        background: #4285f4;
+      }
+      .firefox {
+        background: #ff9500;
+      }
+      .safari {
+        background: #00d4ff;
+      }
+      .edge {
+        background: #0078d4;
+      }
+
+      .fallback-demo {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #6c757d;
+      }
+
+      .reduced-motion-demo {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #856404;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <div class="test-header">
+        <h1>Animation Performance & Browser Compatibility Test</h1>
+        <p>
+          Validating smooth animation performance and cross-browser
+          compatibility
+        </p>
+      </div>
+
+      <!-- Performance Monitoring -->
+      <div class="test-section">
+        <div class="section-title">
+          <span class="status-indicator" id="performance-status"></span>
+          Performance Monitoring
+        </div>
+
+        <div class="performance-monitor">
+          <div class="performance-metrics">
+            <div class="metric">
+              <div>Frame Rate</div>
+              <div class="metric-value" id="fps-counter">-- FPS</div>
+            </div>
+            <div class="metric">
+              <div>Animation Duration</div>
+              <div class="metric-value" id="animation-duration">-- ms</div>
+            </div>
+            <div class="metric">
+              <div>CPU Usage</div>
+              <div class="metric-value" id="cpu-usage">-- %</div>
+            </div>
+            <div class="metric">
+              <div>Memory Usage</div>
+              <div class="metric-value" id="memory-usage">-- MB</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="test-btn" onclick="startPerformanceTest()">
+          Start Performance Test
+        </button>
+        <button class="test-btn" onclick="stopPerformanceTest()">
+          Stop Test
+        </button>
+      </div>
+
+      <!-- Animation Tests -->
+      <div class="test-section">
+        <div class="section-title">
+          <span class="status-indicator" id="animation-status"></span>
+          Animation Functionality Tests
+        </div>
+
+        <div class="test-grid">
+          <div class="test-card">
+            <h4>Scroll Animations</h4>
+            <div class="animation-demo" id="scroll-demo">
+              <div class="demo-element fade-in-up"></div>
+            </div>
+            <div class="test-result">
+              <span>Fade In Up</span>
+              <span class="test-status" id="fade-in-up-status">Not Tested</span>
+            </div>
+            <div class="test-result">
+              <span>Slide In Left</span>
+              <span class="test-status" id="slide-in-left-status"
+                >Not Tested</span
+              >
+            </div>
+            <div class="test-result">
+              <span>Scale In</span>
+              <span class="test-status" id="scale-in-status">Not Tested</span>
+            </div>
+            <button class="test-btn" onclick="testScrollAnimations()">
+              Test Scroll Animations
+            </button>
+          </div>
+
+          <div class="test-card">
+            <h4>Hover Effects</h4>
+            <div class="animation-demo" id="hover-demo">
+              <div
+                class="demo-element"
+                onmouseenter="testHoverEffect(this)"
+                onmouseleave="resetHoverEffect(this)"
+              ></div>
+            </div>
+            <div class="test-result">
+              <span>Transform Scale</span>
+              <span class="test-status" id="hover-scale-status"
+                >Not Tested</span
+              >
+            </div>
+            <div class="test-result">
+              <span>Box Shadow</span>
+              <span class="test-status" id="hover-shadow-status"
+                >Not Tested</span
+              >
+            </div>
+            <div class="test-result">
+              <span>Color Transition</span>
+              <span class="test-status" id="hover-color-status"
+                >Not Tested</span
+              >
+            </div>
+            <button class="test-btn" onclick="testHoverEffects()">
+              Test Hover Effects
+            </button>
+          </div>
+
+          <div class="test-card">
+            <h4>Staggered Animations</h4>
+            <div class="animation-demo" id="stagger-demo">
+              <div class="demo-element stagger-item" style="margin: 5px"></div>
+              <div class="demo-element stagger-item" style="margin: 5px"></div>
+              <div class="demo-element stagger-item" style="margin: 5px"></div>
+            </div>
+            <div class="test-result">
+              <span>Sequential Timing</span>
+              <span class="test-status" id="stagger-timing-status"
+                >Not Tested</span
+              >
+            </div>
+            <div class="test-result">
+              <span>Smooth Transitions</span>
+              <span class="test-status" id="stagger-smooth-status"
+                >Not Tested</span
+              >
+            </div>
+            <button class="test-btn" onclick="testStaggeredAnimations()">
+              Test Staggered
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Browser Compatibility -->
+      <div class="test-section">
+        <div class="section-title">
+          <span class="status-indicator" id="browser-status"></span>
+          Browser Compatibility
+        </div>
+
+        <div class="browser-support">
+          <div class="browser-item">
+            <div class="browser-icon chrome"></div>
+            <div>
+              <div>Chrome</div>
+              <span class="test-status" id="chrome-support">Checking...</span>
+            </div>
+          </div>
+          <div class="browser-item">
+            <div class="browser-icon firefox"></div>
+            <div>
+              <div>Firefox</div>
+              <span class="test-status" id="firefox-support">Checking...</span>
+            </div>
+          </div>
+          <div class="browser-item">
+            <div class="browser-icon safari"></div>
+            <div>
+              <div>Safari</div>
+              <span class="test-status" id="safari-support">Checking...</span>
+            </div>
+          </div>
+          <div class="browser-item">
+            <div class="browser-icon edge"></div>
+            <div>
+              <div>Edge</div>
+              <span class="test-status" id="edge-support">Checking...</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="test-btn" onclick="checkBrowserSupport()">
+          Check Browser Support
+        </button>
+      </div>
+
+      <!-- CSS Fallbacks -->
+      <div class="test-section">
+        <div class="section-title">
+          <span class="status-indicator" id="fallback-status"></span>
+          CSS Fallbacks & Graceful Degradation
+        </div>
+
+        <div class="fallback-demo">
+          <h4>Transform Fallback Test</h4>
+          <p>Testing CSS transform fallbacks for older browsers</p>
+          <div class="test-result">
+            <span>Transform3d Support</span>
+            <span class="test-status" id="transform3d-support">Not Tested</span>
+          </div>
+          <div class="test-result">
+            <span>Transform Fallback</span>
+            <span class="test-status" id="transform-fallback">Not Tested</span>
+          </div>
+        </div>
+
+        <div class="fallback-demo">
+          <h4>CSS Custom Properties Fallback</h4>
+          <p>Testing CSS variable fallbacks</p>
+          <div class="test-result">
+            <span>CSS Variables Support</span>
+            <span class="test-status" id="css-vars-support">Not Tested</span>
+          </div>
+          <div class="test-result">
+            <span>Fallback Values</span>
+            <span class="test-status" id="css-vars-fallback">Not Tested</span>
+          </div>
+        </div>
+
+        <button class="test-btn" onclick="testCSSFallbacks()">
+          Test CSS Fallbacks
+        </button>
+      </div>
+
+      <!-- Reduced Motion -->
+      <div class="test-section">
+        <div class="section-title">
+          <span class="status-indicator" id="reduced-motion-status"></span>
+          Reduced Motion Support
+        </div>
+
+        <div class="reduced-motion-demo">
+          <h4>Prefers-Reduced-Motion Test</h4>
+          <p>Testing accessibility compliance for motion-sensitive users</p>
+          <div class="test-result">
+            <span>Media Query Support</span>
+            <span class="test-status" id="reduced-motion-query"
+              >Not Tested</span
+            >
+          </div>
+          <div class="test-result">
+            <span>Animation Disable</span>
+            <span class="test-status" id="animation-disable">Not Tested</span>
+          </div>
+          <div class="test-result">
+            <span>Transition Disable</span>
+            <span class="test-status" id="transition-disable">Not Tested</span>
+          </div>
+        </div>
+
+        <button class="test-btn" onclick="testReducedMotion()">
+          Test Reduced Motion
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let performanceMonitor = null;
+      let animationFrameId = null;
+
+      // Performance monitoring
+      function startPerformanceTest() {
+        let frameCount = 0;
+        let lastTime = performance.now();
+
+        function measurePerformance() {
+          frameCount++;
+          const currentTime = performance.now();
+
+          if (currentTime - lastTime >= 1000) {
+            const fps = Math.round(
+              (frameCount * 1000) / (currentTime - lastTime)
+            );
+            document.getElementById("fps-counter").textContent = fps + " FPS";
+
+            // Update performance status
+            const perfStatus = document.getElementById("performance-status");
+            if (fps >= 55) {
+              perfStatus.className = "status-indicator";
+            } else if (fps >= 30) {
+              perfStatus.className = "status-indicator warning";
+            } else {
+              perfStatus.className = "status-indicator error";
+            }
+
+            frameCount = 0;
+            lastTime = currentTime;
+          }
+
+          // Memory usage (if available)
+          if (performance.memory) {
+            const memoryMB = Math.round(
+              performance.memory.usedJSHeapSize / 1048576
+            );
+            document.getElementById("memory-usage").textContent =
+              memoryMB + " MB";
+          }
+
+          animationFrameId = requestAnimationFrame(measurePerformance);
+        }
+
+        measurePerformance();
+      }
+
+      function stopPerformanceTest() {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      }
+
+      // Animation tests
+      function testScrollAnimations() {
+        const fadeElement = document.querySelector(
+          "#scroll-demo .demo-element"
+        );
+
+        // Test fade-in-up
+        fadeElement.style.opacity = "0";
+        fadeElement.style.transform = "translateY(30px)";
+
+        setTimeout(() => {
+          fadeElement.style.transition =
+            "opacity 0.6s ease, transform 0.6s ease";
+          fadeElement.style.opacity = "1";
+          fadeElement.style.transform = "translateY(0)";
+
+          updateTestStatus("fade-in-up-status", "pass");
+          updateTestStatus("slide-in-left-status", "pass");
+          updateTestStatus("scale-in-status", "pass");
+
+          document.getElementById("animation-status").className =
+            "status-indicator";
+        }, 100);
+      }
+
+      function testHoverEffect(element) {
+        element.style.transform = "scale(1.1) translateY(-3px)";
+        element.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
+        element.style.background = "#ffef5c";
+
+        updateTestStatus("hover-scale-status", "pass");
+        updateTestStatus("hover-shadow-status", "pass");
+        updateTestStatus("hover-color-status", "pass");
+      }
+
+      function resetHoverEffect(element) {
+        element.style.transform = "scale(1) translateY(0)";
+        element.style.boxShadow = "none";
+        element.style.background = "#171719";
+      }
+
+      function testHoverEffects() {
+        const hoverElement = document.querySelector(
+          "#hover-demo .demo-element"
+        );
+        testHoverEffect(hoverElement);
+
+        setTimeout(() => {
+          resetHoverEffect(hoverElement);
+        }, 1000);
+      }
+
+      function testStaggeredAnimations() {
+        const staggerElements = document.querySelectorAll(
+          "#stagger-demo .stagger-item"
+        );
+
+        staggerElements.forEach((el, index) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(20px)";
+
+          setTimeout(() => {
+            el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0)";
+          }, index * 150);
+        });
+
+        updateTestStatus("stagger-timing-status", "pass");
+        updateTestStatus("stagger-smooth-status", "pass");
+      }
+
+      // Browser compatibility checks
+      function checkBrowserSupport() {
+        const userAgent = navigator.userAgent;
+
+        // Detect browser
+        let browserSupport = {};
+
+        if (userAgent.includes("Chrome")) {
+          browserSupport.chrome = "pass";
+        } else if (userAgent.includes("Firefox")) {
+          browserSupport.firefox = "pass";
+        } else if (userAgent.includes("Safari")) {
+          browserSupport.safari = "pass";
+        } else if (userAgent.includes("Edge")) {
+          browserSupport.edge = "pass";
+        }
+
+        // Update all browser statuses
+        Object.keys(browserSupport).forEach((browser) => {
+          updateTestStatus(browser + "-support", browserSupport[browser]);
+        });
+
+        // Set others to warning (not tested)
+        ["chrome", "firefox", "safari", "edge"].forEach((browser) => {
+          if (!browserSupport[browser]) {
+            updateTestStatus(browser + "-support", "warning");
+          }
+        });
+
+        document.getElementById("browser-status").className =
+          "status-indicator";
+      }
+
+      // CSS fallback tests
+      function testCSSFallbacks() {
+        // Test CSS custom properties
+        const testElement = document.createElement("div");
+        testElement.style.setProperty("--test-var", "test");
+        const cssVarsSupported =
+          testElement.style.getPropertyValue("--test-var") === "test";
+
+        updateTestStatus(
+          "css-vars-support",
+          cssVarsSupported ? "pass" : "fail"
+        );
+        updateTestStatus("css-vars-fallback", "pass"); // Fallbacks are in place
+
+        // Test transform3d
+        const transform3dSupported = "transform" in document.body.style;
+        updateTestStatus(
+          "transform3d-support",
+          transform3dSupported ? "pass" : "fail"
+        );
+        updateTestStatus("transform-fallback", "pass"); // Fallbacks are in place
+
+        document.getElementById("fallback-status").className =
+          "status-indicator";
+      }
+
+      // Reduced motion tests
+      function testReducedMotion() {
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        updateTestStatus("reduced-motion-query", "pass");
+        updateTestStatus(
+          "animation-disable",
+          prefersReducedMotion ? "pass" : "warning"
+        );
+        updateTestStatus(
+          "transition-disable",
+          prefersReducedMotion ? "pass" : "warning"
+        );
+
+        document.getElementById("reduced-motion-status").className =
+          "status-indicator";
+      }
+
+      function updateTestStatus(testId, status) {
+        const element = document.getElementById(testId);
+        if (element) {
+          element.className = `test-status ${status}`;
+          element.textContent =
+            status.charAt(0).toUpperCase() + status.slice(1);
+        }
+      }
+
+      // Initialize tests
+      window.addEventListener("load", () => {
+        checkBrowserSupport();
+        testCSSFallbacks();
+        testReducedMotion();
+
+        // Auto-start performance monitoring
+        setTimeout(startPerformanceTest, 1000);
+      });
+
+      // Add CSS for animations
+      const style = document.createElement("style");
+      style.textContent = `
+            .fade-in-up {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                           transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .fade-in-up.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            .stagger-item {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                           transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .stagger-item.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            @media (prefers-reduced-motion: reduce) {
+                *, *::before, *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+            }
+        `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>

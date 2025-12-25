@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio Responsive Testing</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f7f7f9;
+      }
+
+      .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .test-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #ffef5c;
+      }
+
+      .test-header h1 {
+        color: #171719;
+        margin: 0;
+      }
+
+      .breakpoint-section {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+      }
+
+      .breakpoint-title {
+        color: #171719;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #28a745;
+      }
+
+      .status-indicator.warning {
+        background: #ffc107;
+      }
+
+      .status-indicator.error {
+        background: #dc3545;
+      }
+
+      .test-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .test-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        background: #ffef5c;
+        color: #171719;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .test-btn:hover {
+        background: #f0e04a;
+        transform: translateY(-1px);
+      }
+
+      .test-btn.active {
+        background: #171719;
+        color: white;
+      }
+
+      .viewport-simulator {
+        border: 3px solid #171719;
+        border-radius: 8px;
+        margin: 20px 0;
+        overflow: hidden;
+        transition: all 0.5s ease;
+        position: relative;
+      }
+
+      .viewport-info {
+        background: #171719;
+        color: white;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .viewport-frame {
+        width: 100%;
+        border: none;
+        transition: all 0.5s ease;
+      }
+
+      .test-results {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+      }
+
+      .test-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .test-item:last-child {
+        border-bottom: none;
+      }
+
+      .test-status {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .test-status.pass {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .test-status.fail {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .test-status.warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .instructions {
+        background: #e7f3ff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        border-left: 4px solid #007bff;
+      }
+
+      .instructions h3 {
+        margin-top: 0;
+        color: #0056b3;
+      }
+
+      .instructions ul {
+        margin-bottom: 0;
+      }
+
+      .instructions li {
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <div class="test-header">
+        <h1>Portfolio Responsive Testing Suite</h1>
+        <p>Testing layout integrity across all breakpoints (320px-1920px+)</p>
+      </div>
+
+      <div class="instructions">
+        <h3>Testing Instructions</h3>
+        <ul>
+          <li>
+            Click each breakpoint button to simulate different screen sizes
+          </li>
+          <li>
+            Observe layout behavior, typography scaling, and component alignment
+          </li>
+          <li>
+            Check for horizontal scrolling, overlapping elements, or broken
+            layouts
+          </li>
+          <li>Verify touch targets meet minimum 44px requirement on mobile</li>
+          <li>Test navigation and interactive elements at each breakpoint</li>
+        </ul>
+      </div>
+
+      <!-- Mobile Testing -->
+      <div class="breakpoint-section">
+        <div class="breakpoint-title">
+          <span class="status-indicator" id="mobile-status"></span>
+          Mobile (320px - 599px)
+        </div>
+        <div class="test-controls">
+          <button
+            class="test-btn"
+            onclick="setViewport(320, 568, 'mobile-frame')"
+          >
+            iPhone SE (320px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(375, 667, 'mobile-frame')"
+          >
+            iPhone 8 (375px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(414, 896, 'mobile-frame')"
+          >
+            iPhone 11 Pro Max (414px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(360, 640, 'mobile-frame')"
+          >
+            Galaxy S5 (360px)
+          </button>
+        </div>
+        <div class="viewport-simulator" id="mobile-simulator">
+          <div class="viewport-info">
+            <span id="mobile-dimensions">Select a mobile device</span>
+            <span>Mobile Breakpoint</span>
+          </div>
+          <iframe
+            id="mobile-frame"
+            class="viewport-frame"
+            src="index.html"
+            height="600"
+          ></iframe>
+        </div>
+        <div class="test-results" id="mobile-results">
+          <div class="test-item">
+            <span>Typography Readability</span>
+            <span class="test-status" id="mobile-typography">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Touch Target Size (≥44px)</span>
+            <span class="test-status" id="mobile-touch">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Horizontal Scrolling</span>
+            <span class="test-status" id="mobile-scroll">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Component Layout</span>
+            <span class="test-status" id="mobile-layout">Not Tested</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tablet Testing -->
+      <div class="breakpoint-section">
+        <div class="breakpoint-title">
+          <span class="status-indicator" id="tablet-status"></span>
+          Tablet (600px - 959px)
+        </div>
+        <div class="test-controls">
+          <button
+            class="test-btn"
+            onclick="setViewport(768, 1024, 'tablet-frame')"
+          >
+            iPad (768px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(834, 1112, 'tablet-frame')"
+          >
+            iPad Air (834px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(820, 1180, 'tablet-frame')"
+          >
+            iPad Pro 11" (820px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(600, 960, 'tablet-frame')"
+          >
+            Min Tablet (600px)
+          </button>
+        </div>
+        <div class="viewport-simulator" id="tablet-simulator">
+          <div class="viewport-info">
+            <span id="tablet-dimensions">Select a tablet device</span>
+            <span>Tablet Breakpoint</span>
+          </div>
+          <iframe
+            id="tablet-frame"
+            class="viewport-frame"
+            src="index.html"
+            height="700"
+          ></iframe>
+        </div>
+        <div class="test-results" id="tablet-results">
+          <div class="test-item">
+            <span>Typography Scaling</span>
+            <span class="test-status" id="tablet-typography">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Grid Layout Adaptation</span>
+            <span class="test-status" id="tablet-grid">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Component Spacing</span>
+            <span class="test-status" id="tablet-spacing">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Navigation Usability</span>
+            <span class="test-status" id="tablet-nav">Not Tested</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Testing -->
+      <div class="breakpoint-section">
+        <div class="breakpoint-title">
+          <span class="status-indicator" id="desktop-status"></span>
+          Desktop (960px+)
+        </div>
+        <div class="test-controls">
+          <button
+            class="test-btn"
+            onclick="setViewport(1024, 768, 'desktop-frame')"
+          >
+            Small Desktop (1024px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(1280, 720, 'desktop-frame')"
+          >
+            Medium Desktop (1280px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(1440, 900, 'desktop-frame')"
+          >
+            Large Desktop (1440px)
+          </button>
+          <button
+            class="test-btn"
+            onclick="setViewport(1920, 1080, 'desktop-frame')"
+          >
+            Full HD (1920px)
+          </button>
+        </div>
+        <div class="viewport-simulator" id="desktop-simulator">
+          <div class="viewport-info">
+            <span id="desktop-dimensions">Select a desktop size</span>
+            <span>Desktop Breakpoint</span>
+          </div>
+          <iframe
+            id="desktop-frame"
+            class="viewport-frame"
+            src="index.html"
+            height="800"
+          ></iframe>
+        </div>
+        <div class="test-results" id="desktop-results">
+          <div class="test-item">
+            <span>Typography Scaling</span>
+            <span class="test-status" id="desktop-typography">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Layout Utilization</span>
+            <span class="test-status" id="desktop-layout">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Component Alignment</span>
+            <span class="test-status" id="desktop-alignment">Not Tested</span>
+          </div>
+          <div class="test-item">
+            <span>Hover Effects</span>
+            <span class="test-status" id="desktop-hover">Not Tested</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function setViewport(width, height, frameId) {
+        const frame = document.getElementById(frameId);
+        const simulator = frame.parentElement;
+        const dimensionsSpan = simulator.querySelector(
+          ".viewport-info span:first-child"
+        );
+
+        // Update frame size
+        frame.style.width = width + "px";
+        frame.style.height = height + "px";
+
+        // Update dimensions display
+        dimensionsSpan.textContent = `${width}px × ${height}px`;
+
+        // Center the frame if it's smaller than container
+        if (width < simulator.offsetWidth - 40) {
+          frame.style.margin = "0 auto";
+          frame.style.display = "block";
+        } else {
+          frame.style.margin = "0";
+          frame.style.display = "block";
+        }
+
+        // Update active button
+        const buttons = simulator.parentElement.querySelectorAll(".test-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        // Auto-run basic tests after viewport change
+        setTimeout(() => {
+          runBasicTests(frameId);
+        }, 1000);
+      }
+
+      function runBasicTests(frameId) {
+        const frame = document.getElementById(frameId);
+        const breakpoint = frameId.split("-")[0];
+
+        try {
+          // Check if frame content is accessible
+          const frameDoc =
+            frame.contentDocument || frame.contentWindow.document;
+
+          // Test 1: Check for horizontal scrolling
+          const hasHorizontalScroll =
+            frameDoc.body.scrollWidth > frameDoc.body.clientWidth;
+          updateTestStatus(
+            `${breakpoint}-scroll`,
+            hasHorizontalScroll ? "fail" : "pass"
+          );
+
+          // Test 2: Check typography (basic visibility)
+          const titles = frameDoc.querySelectorAll(
+            "h1, h2, h3, .title, .sub-title"
+          );
+          const typographyVisible =
+            titles.length > 0 && titles[0].offsetHeight > 0;
+          updateTestStatus(
+            `${breakpoint}-typography`,
+            typographyVisible ? "pass" : "fail"
+          );
+
+          // Test 3: Check component layout (basic structure)
+          const mainComponents = frameDoc.querySelectorAll(
+            "section, .hero-section, .projects-section, .skills-section"
+          );
+          const layoutIntact = mainComponents.length >= 4;
+          updateTestStatus(
+            `${breakpoint}-layout`,
+            layoutIntact ? "pass" : "fail"
+          );
+
+          // Test 4: Touch targets for mobile
+          if (breakpoint === "mobile") {
+            const buttons = frameDoc.querySelectorAll("button, .v-btn, a");
+            let touchTargetsOk = true;
+            buttons.forEach((btn) => {
+              const rect = btn.getBoundingClientRect();
+              if (rect.width < 44 || rect.height < 44) {
+                touchTargetsOk = false;
+              }
+            });
+            updateTestStatus(
+              "mobile-touch",
+              touchTargetsOk ? "pass" : "warning"
+            );
+          }
+
+          // Update overall status
+          updateOverallStatus(breakpoint);
+        } catch (error) {
+          console.warn("Could not access frame content for testing:", error);
+          // Mark tests as warning if we can't access frame content
+          updateTestStatus(`${breakpoint}-typography`, "warning");
+          updateTestStatus(`${breakpoint}-layout`, "warning");
+          updateTestStatus(`${breakpoint}-scroll`, "warning");
+        }
+      }
+
+      function updateTestStatus(testId, status) {
+        const element = document.getElementById(testId);
+        if (element) {
+          element.className = `test-status ${status}`;
+          element.textContent =
+            status.charAt(0).toUpperCase() + status.slice(1);
+        }
+      }
+
+      function updateOverallStatus(breakpoint) {
+        const statusIndicator = document.getElementById(`${breakpoint}-status`);
+        const testResults = document.querySelectorAll(
+          `#${breakpoint}-results .test-status`
+        );
+
+        let hasError = false;
+        let hasWarning = false;
+
+        testResults.forEach((result) => {
+          if (result.classList.contains("fail")) hasError = true;
+          if (result.classList.contains("warning")) hasWarning = true;
+        });
+
+        if (hasError) {
+          statusIndicator.className = "status-indicator error";
+        } else if (hasWarning) {
+          statusIndicator.className = "status-indicator warning";
+        } else {
+          statusIndicator.className = "status-indicator";
+        }
+      }
+
+      // Initialize with default mobile view
+      setTimeout(() => {
+        setViewport(375, 667, "mobile-frame");
+      }, 500);
+    </script>
+  </body>
+</html>
