@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background-color: #f7f7f9">
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <v-main>
       <div class="main--container" id="main-content">
@@ -29,7 +29,9 @@ import Footer from "./components/Footer.vue";
   --color-text-primary: #171719;
   --color-text-secondary: #4a4a4a;
   --color-background: #f7f7f9;
-  --color-surface: #ffffff;
+  /* I changed here */
+  /* --color-surface: #ffffff; */
+  --color-surface: #f7f7f9;
   --color-selection-bg: #ffef5c;
   --color-selection-text: #000000c9;
 
@@ -219,6 +221,7 @@ html {
   margin-inline: auto;
   padding: 0 var(--spacing-md);
   transition: all var(--transition-normal);
+  background-color: var(--color-background);
 }
 
 .mt-responsive {
@@ -356,7 +359,8 @@ a:focus-visible,
   :root {
     --color-text-primary: #000000;
     --color-text-secondary: #000000;
-    --color-background: #ffffff;
+    /* --color-background: #ffffff; */
+    --color-background: #f7f7f9;
   }
 
   .hero-title-container {

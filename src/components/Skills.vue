@@ -66,7 +66,7 @@ const skills = [
   { text: "Express.js", icon: "mdi-server" },
   { text: "MySQL", icon: "mdi-database" },
   { text: "Docker", icon: "mdi-docker" },
-  { text: "Firebase", icon: "mdi-firebase" },
+  { text: "GitHub Actions", icon: "mdi-github" },
 ];
 
 onMounted(() => {

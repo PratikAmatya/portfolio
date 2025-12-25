@@ -86,7 +86,7 @@
                 >
                   <v-btn
                     variant="text"
-                    :prepend-icon="link.icon"
+                    :append-icon="link.icon"
                     class="text-none featured-btn touch-target"
                     size="large"
                     tabindex="-1"
@@ -97,7 +97,10 @@
               </div>
             </div>
 
-            <div class="featured-visual">
+            <div
+              class="featured-visual featured-project-card"
+              @click="openLink('https://sparkjoy.in.th')"
+            >
               <div class="project-mockup">
                 <div class="mockup-browser">
                   <div class="browser-header">
@@ -107,14 +110,22 @@
                       <span class="dot green"></span>
                     </div>
                     <div class="browser-url">
-                      {{
+                      <!-- {{
                         featuredProject.title.toLowerCase().replace(/\s+/g, "")
-                      }}.com
+                      }}.com -->
+                      https://sparkjoy.in.th/
                     </div>
                   </div>
                   <div class="browser-content">
                     <div class="content-placeholder">
-                      <v-icon size="80" color="#ffef5c">mdi-shopping</v-icon>
+                      <!-- <v-icon size="80" color="#ffef5c"
+                        >mdi-book-open-outline</v-icon
+                      > -->
+                      <v-img
+                        aspect-ratio="16/9"
+                        cover
+                        src="@/assets/sparkjoy-logo.png"
+                      ></v-img>
                       <div class="placeholder-text">
                         <div class="placeholder-line long"></div>
                         <div class="placeholder-line medium"></div>
@@ -317,6 +328,7 @@ const featuredProject = {
     "Passport.js",
     "Firebase",
     "GitHub Actions",
+    "NeonDB",
   ],
   features: [
     "User Authentication & Social Login",
@@ -328,25 +340,40 @@ const featuredProject = {
   ],
   links: [
     {
-      name: "Frontend Repository",
-      icon: "mdi-github",
-      url: "https://github.com/PratikAmatya/SparkJoy-Frontend",
+      name: "Reader Application",
+      icon: "mdi-arrow-top-right",
+      url: "https://sparkjoy.in.th/",
     },
     {
-      name: "Backend Repository",
-      icon: "mdi-github",
-      url: "https://github.com/PratikAmatya/SparkJoy-Backend",
+      name: "Writer Application",
+      icon: "mdi-arrow-top-right",
+      url: "https://writer.sparkjoy.in.th/",
     },
   ],
   status: "Production Ready",
-  year: "2024 - Present",
+  year: "2023 - 2025",
 };
 
 const otherProjects = [
   {
+    title: "MANAVIS – AI Video Analytics Platform",
+    description:
+      "An AI-powered video analytics solution for retail, venue, and hospitality businesses, designed to provide customer insights, improve customer experience, and drive sales growth. I worked on the admin dashboard using Vue.js and Vuetify, which displayed detailed analytics and insights generated from video data.",
+    technologies: ["Vue.js", "Vuetify", "REST APIs"],
+    links: [
+      {
+        icon: "mdi-web",
+        name: "Product Website",
+        url: "https://www.baksters.com/manavis",
+      },
+    ],
+    status: "Production",
+    year: "2021 - 2023",
+  },
+  {
     title: "Kompost API",
     description:
-      "A RESTful API for composting management system presented at Ace Ignite 48 hours Hackathon 2022. Features user authentication, pickup scheduling, and request tracking.",
+      "A RESTful API for a composting management system presented at Ace Ignite 48 Hours Hackathon 2022, enabling household users to sign up, request organic waste pickups, schedule collections, and track requests through secure authentication and API-driven workflows.",
     technologies: ["Express.js", "Sequelize ORM", "MySQL"],
     links: [
       {
@@ -355,23 +382,23 @@ const otherProjects = [
         url: "https://github.com/PratikAmatya/kompost-api",
       },
     ],
-    status: "Hackathon Winner",
+    status: "Hackathon",
     year: "2022",
   },
   {
-    title: "Simple Feedback Form",
+    title: "Personal Notes & Blog Website",
     description:
-      "Node.js application with email verification system. Stores validated feedback in MongoDB and sends confirmation emails via SendGrid API.",
-    technologies: ["Express.js", "SendGrid API", "MongoDB", "JWT", "EJS"],
+      "A static website built with Hugo that contains personal notes and documentation related to deployment processes and various software technologies, used as a reference for learning and implementation.",
+    technologies: ["Hugo", "Markdown", "HTML", "CSS"],
     links: [
       {
-        icon: "mdi-github",
-        name: "Repository",
-        url: "https://github.com/PratikAmatya/simple-feedback-form.git",
+        icon: "mdi-web",
+        name: "Live Website",
+        url: "https://pratikamatya.github.io/docs/",
       },
     ],
-    status: "Complete",
-    year: "2022",
+    status: "Live",
+    year: "2023",
   },
   {
     title: "Click Speed Test",
@@ -395,6 +422,9 @@ const otherProjects = [
   },
 ];
 
+const openLink = (url) => {
+  window.open(url, "_blank");
+};
 const startAutoPlay = () => {
   if (autoPlayInterval) clearInterval(autoPlayInterval);
   autoPlayInterval = setInterval(() => {
@@ -496,6 +526,10 @@ onUnmounted(() => {
 /* Featured Project Styles */
 .featured-project {
   margin-bottom: 4rem;
+}
+
+.featured-project-card {
+  cursor: pointer;
 }
 
 .featured-card {
@@ -804,12 +838,12 @@ onUnmounted(() => {
   letter-spacing: 0.5px;
 }
 
-.project-status.hackathon-winner {
+.project-status.hackathon {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
   color: white;
 }
 
-.project-status.complete {
+.project-status.production {
   background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
   color: white;
 }
@@ -819,7 +853,7 @@ onUnmounted(() => {
   color: white;
 }
 
-.project-status.production-ready {
+.project-status.complete {
   background: linear-gradient(135deg, #ffef5c 0%, #f0e04a 100%);
   color: #171719;
 }

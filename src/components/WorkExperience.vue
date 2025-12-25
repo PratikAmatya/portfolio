@@ -96,19 +96,19 @@ const years = [
   {
     color: "#ffef5c",
     startDate: "Oct 2021",
-    endDate: "Present",
-    duration: "3+ years",
-    title: "Full Stack Developer",
+    endDate: "Sept 2025",
+    duration: "4 years",
+    title: "Software Engineer",
     organization: "Beam Lab Pvt. Ltd.",
     description:
-      "My responsibilities include building and deploying scalable web applications with React.js and Vue.js, while developing secure APIs with Express.js and integrating CI/CD pipelines for smooth delivery.",
+      "Built and deployed web and mobile applications using React.js, Vue.js, and Node.js, designed and implemented RESTful APIs and database schemas for production systems, set up CI/CD pipelines with GitHub Actions to automate testing and deployment, and collaborated with interns and engineers during sprint planning and feature delivery.",
   },
   {
     color: "#ffef5c",
     startDate: "Jun 2021",
     endDate: "Oct 2021",
     duration: "4 months",
-    title: "Software Developer Intern",
+    title: "Software Engineer Intern",
     organization: "Beam Lab Pvt. Ltd.",
     description:
       "As an intern, I developed and maintained front-end web applications using React.js and Vue.js, designed mockups with Figma, and assisted in database development and maintenance.",
