@@ -50,7 +50,7 @@
               </v-col>
               <v-col>
                 <a
-                  href="https://drive.google.com/file/d/1vjqoFFdX6oiBaEi6UCON_r8aCH1D17x0/view?usp=sharing"
+                  href="https://drive.google.com/file/d/1kCx-W4X4Q5NJMs8GNsnbk6B_TjBBMUx7/view?usp=sharing"
                   target="_blank"
                   aria-label="Open resume in new tab"
                   rel="noopener noreferrer"
